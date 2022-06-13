@@ -1,0 +1,55 @@
+  int fun(int id,int w,int wt[],int val[], vector<vector<int>>&dp,int n)
+    {
+        if(id==0)
+        {
+            if(wt[0]<=w)return val[0];
+            else
+            return 0;
+        }
+        if(dp[id][w]!=-1)return dp[id][w];
+        int ntake=0+fun(id-1,w,wt,val,dp,n);
+        int take=INT_MIN;
+        if(wt[id]<=w)
+        take=val[id]+fun(id-1,w-wt[id],wt,val,dp,n);
+        
+        return dp[id][w]=max(take,ntake);
+        
+    }
+    int knapSack(int w, int wt[], int val[], int n) 
+    { 
+      vector<vector<int>>dp(n,vector<int>(w+1,0));
+     // return fun(n-1,w,wt,val,dp,n);
+      
+   /// tabulation + space optimization;
+   
+    vector<int>curr(w+1,0);
+      vector<int>prev(w+1,0);
+      for(int i=wt[0];i<=w;i++)
+      {
+         // dp[0][i]=val[0];
+         
+          prev[i]=val[0];
+      }
+     
+      for(int i=1;i<n;i++)
+      {
+          for(int j=1;j<=w;j++)
+          {
+             
+              int ntake=0+prev[j];
+                 // int  ntake=0+dp[i-1][j];
+                   int take=INT_MIN;
+                   if(wt[i]<=j)
+                   {
+                      // take=val[i]+dp[i-1][j-wt[i]];
+                      take=val[i]+prev[j-wt[i]];
+                   }
+                  // dp[i][j]=max(take,ntake);
+              curr[j]=max(take,ntake);
+              
+          }
+          prev=curr;
+      }
+      //return dp[n-1][w];
+     return prev[w];
+    }
